@@ -23,7 +23,7 @@
     <%= f.text_field :uid %>
   </div>
   <div class="field">
-    <%= f.hidden_field :image %>
+    <%= f.text_field :image %>
   </div>
   <div class="field">
     <%= f.collection_select :location_id, @board.locations, :id, :name, :include_blank => true %>

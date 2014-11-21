@@ -10,7 +10,6 @@ class BoardsController < ApplicationController
     respond_to do |format|
       format.html { @boards = Board.where network_id: current_user.network_id }
       format.json { @boards = Board.where network_id: current_user.network_id }
-
     end
   end
 

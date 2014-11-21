@@ -34,6 +34,9 @@ gem 'rails_12factor', group: :production
 # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
 gem 'spring',        group: :development
 
+gem 'faraday'
+gem 'faraday_middleware'
+
 group :development, :test do
   gem 'rspec-rails'
   gem 'minitest'
@@ -43,6 +46,7 @@ end
 gem 'devise', "~> 3.2.2"
 gem 'omniauth', '~> 1.0'
 gem 'omniauth-yammer'
+gem 'omniauth-github'
 gem 'yam'
 gem 'fastercsv','~> 1.5'
 

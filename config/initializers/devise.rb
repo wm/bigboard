@@ -228,6 +228,7 @@ Devise.setup do |config|
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
   config.omniauth :yammer, Rails.application.secrets.yammer_api_key, Rails.application.secrets.yammer_api_secret, { :provider_ignores_state => true }
+  config.omniauth :github, Rails.application.secrets.github_api_key, Rails.application.secrets.github_api_secret, { :provider_ignores_state => true, :scope => "user:email,read:org" }
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or

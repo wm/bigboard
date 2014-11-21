@@ -1,24 +1,35 @@
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
+  # :confirmable, :lockable, :timeoutable and
   devise :database_authenticatable, :recoverable,
          :rememberable, :trackable
 
-  devise :omniauthable, :omniauth_providers => [:yammer]
+  devise :omniauthable, :omniauth_providers => [:yammer, :github]
 
   belongs_to :network
+  ACCEPTABLE_ORGS={'IoraHealth' => 1}.freeze
 
-  def self.find_for_yammer_oauth(auth)
-    network = Network.find_or_create_by(nid: auth.extra.raw_info.network_id,  name: auth.extra.raw_info.network_name)
+  def self.find_for_github_oauth(auth)
+    network = nil
+    ACCEPTABLE_ORGS.keys.find do |org|
+      if Github::API.new.member_of(org, auth.info.nickname)
+        network = Network.find_or_create_by(nid: ACCEPTABLE_ORGS[org], name: org)
+      end
+    end
+
+    return nil unless network
+
     user = where(provider: auth[:provider], uid: "#{auth[:uid]}").first_or_create do |user|
       user.provider = auth.provider
       user.uid = auth.uid
+      user.name = auth.info.name
       user.email = auth.info.email
       user.password = Devise.friendly_token[0,20]
       user.network = network
     end
     user.update({
       access_token: auth.credentials.token,
+      name: auth.info.name,
       image: auth.info.image,
       network: network,
       email: auth.info.email
